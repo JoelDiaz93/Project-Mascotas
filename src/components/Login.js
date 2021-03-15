@@ -1,4 +1,10 @@
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
+import { Link, useHistory } from "react-router-dom";
+import Routes from "../constants/routes";
+import { useAuth } from "../lib/auth";
+import withoutAuth from "../hocs/withoutAuth";
+
 const layout = {
   labelCol: {
     span: 8,
@@ -15,13 +21,29 @@ const tailLayout = {
 };
 
 const Login = () => {
+  const history = useHistory();
+  const { login, user } = useAuth();
+
+  useEffect(() => {
+    if (!!user) {
+      history.replace(Routes.HOME);
+    }
+  }, [user]);
+
+
   const onFinish = (values) => {
     console.log('Success:', values);
+    console.log('user:', values.username, values.password);
+    login(values.username, values.password);
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  if (user === null) {
+    return "Verificando sesión...";
+  }
 
   return (
     <Form

@@ -20,8 +20,8 @@ const UsersPage = () => {
 
   return (
     <>
-      <UserInfo />
-      <Button type="primary" onClick={showModalUpdate}>Actualizar informacion</Button>
+      <UserInfo styles={{height: '100vh', display: 'grid'}} />
+      {/* <Button type="primary" onClick={showModalUpdate}>Actualizar informacion</Button>
       <Modal title="Actualizar Informacion" visible={update} onOk={handleUpdateOk} onCancel={handleUpdateCancel}
         footer={[
             // <Button key="back" >
@@ -33,7 +33,7 @@ const UsersPage = () => {
           ]}
       >
         <UpdateUserInfo/>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

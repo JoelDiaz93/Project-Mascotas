@@ -3,7 +3,8 @@ const Routes = {
     ABOUT: "/about",
     USERS: "/users",
     TERMCOND: "/termsconditions",
-    SEARCH: "/search"
+    SEARCH: "/search",
+    MAP: "/map"
   };
   
   export default Routes;

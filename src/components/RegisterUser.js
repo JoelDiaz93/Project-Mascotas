@@ -9,22 +9,28 @@ import {
   Col,
   Checkbox,
   Button,
+  message,
   AutoComplete,
 } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import { useAuth } from "../lib/auth";
+import { Link } from "react-router-dom";
+import withoutAuth from "../hocs/withoutAuth";
+import translateMessage from "../utils/translateMessage";
+
 const { Option } = Select;
 const residences = [
   {
-    value: 'zhejiang',
-    label: 'Zhejiang',
+    value: 'pichincha',
+    label: 'Pichincha',
     children: [
       {
-        value: 'hangzhou',
-        label: 'Hangzhou',
+        value: 'quito',
+        label: 'Quito',
         children: [
           {
-            value: 'xihu',
-            label: 'West Lake',
+            value: 'cotocollao',
+            label: 'Cotocollao',
           },
         ],
       },
@@ -32,15 +38,15 @@ const residences = [
   },
   {
     value: 'jiangsu',
-    label: 'Jiangsu',
+    label: 'Guayas',
     children: [
       {
         value: 'nanjing',
-        label: 'Nanjing',
+        label: 'Guayaquil',
         children: [
           {
             value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
+            label: 'Barrio',
           },
         ],
       },
@@ -79,10 +85,27 @@ const tailFormItemLayout = {
 };
 
 const RegisterUser = () => {
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log('Received values of form: ', values);
+    setLoading(true);
+    try {
+      console.log("FORM data", values);
+      // let photo = null;
+      // if (data.photo) {
+      //   photo = data.photo[0].originFileObj;
+      // }
+      await register({...values});
+      
+      setLoading(false);
+    } catch (error) {
+      const errorCode = error.code;
+      message.error(translateMessage(errorCode));
+      setLoading(false);
+    }
   };
 
   const prefixSelector = (
@@ -92,7 +115,7 @@ const RegisterUser = () => {
           width: 70,
         }}
       >
-        <Option value="86">+86</Option>
+        <Option value="593">+593</Option>
         <Option value="87">+87</Option>
       </Select>
     </Form.Item>
@@ -111,6 +134,7 @@ const RegisterUser = () => {
     label: website,
     value: website,
   }));
+  
   return (
     <Form
       {...formItemLayout}
@@ -125,7 +149,7 @@ const RegisterUser = () => {
     >
       <Form.Item
         name="email"
-        label="E-mail"
+        label="Correo Electronico"
         rules={[
           {
             type: 'email',
@@ -142,7 +166,7 @@ const RegisterUser = () => {
 
       <Form.Item
         name="password"
-        label="Password"
+        label="Contraseña"
         rules={[
           {
             required: true,
@@ -156,7 +180,7 @@ const RegisterUser = () => {
 
       <Form.Item
         name="confirm"
-        label="Confirm Password"
+        label="Confirmar contraseña"
         dependencies={['password']}
         hasFeedback
         rules={[
@@ -182,7 +206,7 @@ const RegisterUser = () => {
         name="nickname"
         label={
           <span>
-            Nickname&nbsp;
+            Usuario&nbsp;
             <Tooltip title="What do you want others to call you?">
               <QuestionCircleOutlined />
             </Tooltip>
@@ -201,7 +225,7 @@ const RegisterUser = () => {
 
       <Form.Item
         name="residence"
-        label="Habitual Residence"
+        label="Direccion"
         rules={[
           {
             type: 'array',
@@ -215,7 +239,7 @@ const RegisterUser = () => {
 
       <Form.Item
         name="phone"
-        label="Phone Number"
+        label="Numero de telefono"
         rules={[
           {
             required: true,
@@ -231,42 +255,7 @@ const RegisterUser = () => {
         />
       </Form.Item>
 
-      <Form.Item
-        name="website"
-        label="Website"
-        rules={[
-          {
-            required: true,
-            message: 'Please input website!',
-          },
-        ]}
-      >
-        <AutoComplete options={websiteOptions} onChange={onWebsiteChange} placeholder="website">
-          <Input />
-        </AutoComplete>
-      </Form.Item>
-
-      <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name="captcha"
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input the captcha you got!',
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Button>Get captcha</Button>
-          </Col>
-        </Row>
-      </Form.Item>
+      
 
       <Form.Item
         name="agreement"
@@ -284,7 +273,7 @@ const RegisterUser = () => {
         </Checkbox>
       </Form.Item>
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           Register
         </Button>
       </Form.Item>

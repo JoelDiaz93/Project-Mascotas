@@ -4,17 +4,22 @@ import React from "react";
 import MainLayout from "./MainLayout";
 import HomePage from "../pages/HomePage";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { AuthProvider } from "../lib/auth";
 import AboutPage from "../pages/AboutPage";
 import UsersPage from "../pages/UsersPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import SearchPage from "../pages/SearchPage";
 import TermCondPage from "../pages/TermCondPage";
+import PetsPage from "../pages/PetsPage";
 
 const { Header, Content, Footer } = Layout;
 
 function App() {
+
+  
   return (
     <>
+    <AuthProvider>
       <Router>
         <MainLayout>
           <Switch>
@@ -33,12 +38,16 @@ function App() {
             <Route path="/termsconditions">
               <TermCondPage />
             </Route>
+            <Route path="/pets">
+              <PetsPage />
+            </Route>
             <Route>
               <NotFoundPage />
             </Route>
           </Switch>
         </MainLayout>
       </Router>
+      </AuthProvider>
     </>
   );
 }
