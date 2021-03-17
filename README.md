@@ -1,3 +1,17 @@
+#Documentacion sobre el proyecto
+Informe del proyecto
+Manual de instalacion
+Manual Tecnico
+https://1drv.ms/u/s!AlKfHS_X_uF5hiUJ_7aLMBGLEb5X?e=IQNeJy
+
+#Sprint 
+Sprint 0: https://youtu.be/8gbrVPC0Fvg
+Sprint 1: https://youtu.be/oxdAnQVOObY
+Sprint 2: https://youtu.be/Pu2-dImHpyQ
+
+#Manual de usuario
+Link: https://youtu.be/IsDzCOrR0uU
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
