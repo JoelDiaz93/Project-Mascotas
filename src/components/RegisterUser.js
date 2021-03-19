@@ -1,76 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Form,
   Input,
   Tooltip,
-  Cascader,
-  Select,
-  Row,
-  Col,
   Checkbox,
+  Cascader,
   Button,
   message,
-  AutoComplete,
-} from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+  DatePicker,
+  Upload,
+} from "antd";
 import { useAuth } from "../lib/auth";
-import { Link } from "react-router-dom";
-import withoutAuth from "../hocs/withoutAuth";
 import translateMessage from "../utils/translateMessage";
+import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
 
-const { Option } = Select;
 const residences = [
   {
-    value: 'pichincha',
-    label: 'Pichincha',
+    value: "pichincha",
+    label: "Pichincha",
     children: [
       {
-        value: 'quito',
-        label: 'Quito',
-        children: [
-          {
-            value: 'cotocollao',
-            label: 'Cotocollao',
-          },
-        ],
+        value: "quito",
+        label: "Quito",
       },
     ],
   },
   {
-    value: 'jiangsu',
-    label: 'Guayas',
+    value: "guayas",
+    label: "Guayas",
     children: [
       {
-        value: 'nanjing',
-        label: 'Guayaquil',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Barrio',
-          },
-        ],
+        value: "guayaquil",
+        label: "Guayaquil",
       },
     ],
   },
 ];
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
+
+const config = {
+  rules: [
+    {
+      type: "object",
+      required: true,
+      message: "Please select time!",
     },
-    sm: {
-      span: 8,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
-  },
+  ],
 };
+
+const formItemLayout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
+};
+
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -89,17 +70,32 @@ const RegisterUser = () => {
   const { register } = useAuth();
   const [form] = Form.useForm();
 
+  const normFile = (e) => {
+    console.log("Upload event:", e.fileList[0]);
+
+    if (Array.isArray(e)) {
+      return e;
+    }
+
+    return e && e.fileList;
+  };
+
   const onFinish = async (values) => {
-    console.log('Received values of form: ', values);
+    const year = values.date.format("YYYY");
+    const month = values.date.format("MM");
+    const day = values.date.format("DD");
+    values.date = [year, month, day];
+    console.log("Received values of form: ", values);
     setLoading(true);
     try {
       console.log("FORM data", values);
-      // let photo = null;
-      // if (data.photo) {
-      //   photo = data.photo[0].originFileObj;
-      // }
-      await register({...values});
-      
+      console.log("photo form", values.photo);
+      let photo = null;
+      if (values.photo) {
+        photo = values.photo[0].originFileObj;
+      }
+      await register({ ...values, photo });
+
       setLoading(false);
     } catch (error) {
       const errorCode = error.code;
@@ -108,56 +104,44 @@ const RegisterUser = () => {
     }
   };
 
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-      >
-        <Option value="593">+593</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    </Form.Item>
-  );
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-
-  const onWebsiteChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
-    }
-  };
-
-  const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-  }));
-  
   return (
     <Form
       {...formItemLayout}
       form={form}
-      name="register"
+      name="validate_other"
       onFinish={onFinish}
       initialValues={{
-        residence: ['zhejiang', 'hangzhou', 'xihu'],
-        prefix: '86',
+        residence: ["Pichincha", "Quito"],
       }}
       scrollToFirstError
     >
       <Form.Item
-        name="email"
-        label="Correo Electronico"
+        name="nickname"
+        label="Usuario"
+        tooltip="Nombre de usuario"
         rules={[
           {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
+            required: true,
+            message: "Ingresa tu nombre de usuario!",
+            whitespace: true,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="email"
+        label="E-mail"
+        tooltip="Cual es tu correo electronico?"
+        rules={[
+          {
+            type: "email",
+            message: "El correo electronico no es valido!",
           },
           {
             required: true,
-            message: 'Please input your E-mail!',
+            message: "Por favor ingresa tu correo electronico!",
           },
         ]}
       >
@@ -170,7 +154,7 @@ const RegisterUser = () => {
         rules={[
           {
             required: true,
-            message: 'Please input your password!',
+            message: "Please input your password!",
           },
         ]}
         hasFeedback
@@ -181,41 +165,66 @@ const RegisterUser = () => {
       <Form.Item
         name="confirm"
         label="Confirmar contraseña"
-        dependencies={['password']}
+        dependencies={["password"]}
         hasFeedback
         rules={[
           {
             required: true,
-            message: 'Please confirm your password!',
+            message: "Please confirm your password!",
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
+              if (!value || getFieldValue("password") === value) {
                 return Promise.resolve();
               }
 
-              return Promise.reject(new Error('The two passwords that you entered do not match!'));
+              return Promise.reject(
+                new Error("The two passwords that you entered do not match!")
+              );
             },
           }),
         ]}
       >
         <Input.Password />
       </Form.Item>
-
       <Form.Item
-        name="nickname"
-        label={
-          <span>
-            Usuario&nbsp;
-            <Tooltip title="What do you want others to call you?">
-              <QuestionCircleOutlined />
-            </Tooltip>
-          </span>
-        }
+        name="name"
+        label="Nombre"
+        tooltip="Cual es tu nombre?"
         rules={[
           {
             required: true,
-            message: 'Please input your nickname!',
+            message: "Por favor ingresa tu nombre!",
+            whitespace: true,
+          },
+        ]}
+      >
+        <Input defaultValue="mysite" />
+      </Form.Item>
+
+      <Form.Item
+        name="lastname"
+        label="Apellido"
+        tooltip="Cual es tu apellido?"
+        rules={[
+          {
+            required: true,
+            message: "Por favor ingresa tu apellido!",
+            whitespace: true,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="phone"
+        label="Telefono"
+        tooltip="Colocar tu numero de telefono o celular"
+        rules={[
+          {
+            required: true,
+            message: "Ingresa tu numero de telefono o celular!",
             whitespace: true,
           },
         ]}
@@ -225,12 +234,13 @@ const RegisterUser = () => {
 
       <Form.Item
         name="residence"
-        label="Direccion"
+        label="Ubicacion"
+        tooltip="Cual es tu provincia y ciudad de residencia?"
         rules={[
           {
-            type: 'array',
+            type: "array",
             required: true,
-            message: 'Please select your habitual residence!',
+            message: "Por favor selecciona tu provincia y ciudad!",
           },
         ]}
       >
@@ -238,24 +248,40 @@ const RegisterUser = () => {
       </Form.Item>
 
       <Form.Item
-        name="phone"
-        label="Numero de telefono"
+        name="address"
+        label="Direccion"
+        tooltip="Cual es tu direccion?"
         rules={[
           {
             required: true,
-            message: 'Please input your phone number!',
+            message: "Por favor ingresa tu direccion!",
+            whitespace: true,
           },
         ]}
       >
-        <Input
-          addonBefore={prefixSelector}
-          style={{
-            width: '100%',
-          }}
-        />
+        <Input />
       </Form.Item>
 
-      
+      <Form.Item
+        name="date"
+        label="Fecha Nac."
+        tooltip="Cual es tu fecha de nacimiento?"
+        {...config}
+      >
+        <DatePicker />
+      </Form.Item>
+
+      <Form.Item
+        name="photo"
+        label="Foto"
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
+        extra="Selecciona un archivo .jpg"
+      >
+        <Upload name="logo" action={null} listType="picture">
+          <Button icon={<UploadOutlined />}>Click to upload</Button>
+        </Upload>
+      </Form.Item>
 
       <Form.Item
         name="agreement"
@@ -263,18 +289,22 @@ const RegisterUser = () => {
         rules={[
           {
             validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+              value
+                ? Promise.resolve()
+                : Promise.reject(new Error("Should accept agreement")),
           },
         ]}
         {...tailFormItemLayout}
       >
         <Checkbox>
-          I have read the <a href="">agreement</a>
+          Acepto los <a href="/termsconditions">terminos y condiciones</a>
         </Checkbox>
       </Form.Item>
-      <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Register
+      <Form.Item {...tailFormItemLayout}></Form.Item>
+
+      <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+        <Button type="primary" htmlType="submit">
+          Registrar
         </Button>
       </Form.Item>
     </Form>

@@ -20,7 +20,7 @@ export const useAuth = () => {
 
 function useAuthProvider() {
   const [user, setUser] = useState(null);
-  const [info, setInfo] = useState(null);
+  // const [dataUser, setDataUser] = useState(null);
 
   const handleUser = (user) => {
     if (user) {
@@ -45,19 +45,30 @@ function useAuthProvider() {
       console.log("USER", user);
       const { uid } = userData.user;
 
-      // let photoURL =
-      //   "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?b=1&k=6&m=1223671392&s=612x612&w=0&h=5VMcL3a_1Ni5rRHX0LkaA25lD_0vkhFsb1iVm1HKVSQ=";
-      // if (data.photo) {
-      //   const snapshot = await storage.ref(`users/${uid}`).put(data.photo);
-      //   photoURL = await snapshot.ref.getDownloadURL();
-      // }
+      const snapshot = await storage.ref(`users/${uid}`).put(data.photo);
+      console.log("file photo", snapshot);
+      const photoURL = await snapshot.ref.getDownloadURL();
 
-      const { nickname, email, phone, prefix } = data;
+      const {
+        nickname,
+        email,
+        name,
+        lastname,
+        phone,
+        date,
+        residence,
+        address,
+      } = data;
       await db.ref(`users/${userData.user.uid}`).set({
         nickname,
         email,
+        name,
+        lastname,
         phone,
-        prefix,
+        date,
+        residence,
+        address,
+        photoURL,
         uid,
       });
 
@@ -90,12 +101,14 @@ function useAuthProvider() {
       });
   }
 
-  async function infoUser(uid) {
-    db.ref(`users/${user.uid}`).on("value", (snapshot) => {
-      const data = snapshot.val();
-      console.log("Function info 1", data);
-    });
-  }
+  // async function infoUser(uid) {
+  //   db.ref(`users/${user.uid}`).on("value", (snapshot) => {
+  //     const data = snapshot.val();
+  //     console.log("Data extraction: ", data);
+  //     setDataUser(data);
+  //     console.log("Data: ", dataUser);
+  //   });
+  // }
 
   async function logout() {
     try {
@@ -129,12 +142,16 @@ function useAuthProvider() {
   useEffect(() => {
     // try {
     const init = () => {
-      auth.onAuthStateChanged((user) => {
+      auth.onAuthStateChanged(async (user) => {
         if (user) {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/firebase.User
           console.log("SESIÓN ACTIVA", user);
-          handleUser(user);
+
+          const userInfo = await db.ref(`users/${user.uid}`).once("value");
+          const obtener = userInfo.val();
+          console.log("usuario in auth", obtener);
+          handleUser({ ...user, ...obtener });
 
           // history.replace(Routes.HOME);
         } else {
@@ -156,7 +173,6 @@ function useAuthProvider() {
     register,
     login,
     logout,
-    infoUser,
     // sendPasswordResetEmail,
     // confirmPasswordReset
   };

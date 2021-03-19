@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import "../styles/SiderMenu.css";
@@ -7,26 +7,33 @@ import {
   HeartOutlined,
   AliwangwangOutlined,
   TagOutlined,
-  ShoppingOutlined
+  ShoppingOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-class MainSiderMenu extends React.Component {
-  state = {
-    collapsed: false,
-  };
+const MainSiderMenu = () => {
+  const state = { collapsed: false };
 
-  onCollapse = (collapsed) => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  const onCollapse = (collapsed) => {
     console.log(collapsed);
-    this.setState({ collapsed });
+    setCollapsed(!!collapsed);
   };
 
-  render() {
-    const { collapsed } = this.state;
-    return (
-      <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
+  useEffect(
+    () => {
+      const path = window.location.pathname;
+      console.log(path);
+    },
+    { enableHighAccuracy: true }
+  );
+
+  return (
+    <>
+      <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
           <SubMenu key="sub1" icon={<AliwangwangOutlined />} title="Mascotas">
@@ -44,13 +51,13 @@ class MainSiderMenu extends React.Component {
             <Menu.Item key="9">Juguetes</Menu.Item>
             <Menu.Item key="10">Bebederos y platos</Menu.Item>
           </SubMenu>
-          <Menu.Item key="9" icon={<TagOutlined />}>
+          <Menu.Item key="11" icon={<TagOutlined />}>
             Alimentos
           </Menu.Item>
         </Menu>
       </Sider>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default MainSiderMenu;

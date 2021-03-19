@@ -16,11 +16,12 @@ const MainMenu = () => {
 
   useEffect(() => {
     setModalLoginUser(false);
+    setModalRegisterUser(false);
     //console.log("User",user.uid);
     // return () => {
     //   cleanup
     // }
-  }, [user])
+  }, [user]);
 
   const showModalLogin = () => {
     setModalLoginUser(true);
@@ -53,19 +54,30 @@ const MainMenu = () => {
   return (
     <Row justify="space-between">
       <Col>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
           <Menu.Item key="1">
             <Link to={Routes.HOME}>INICIO</Link>
           </Menu.Item>
+
           <Menu.Item key="2">
             <Link to={Routes.SEARCH}>BUSCAR</Link>
           </Menu.Item>
+
           <Menu.Item key="3">
             <Link to={Routes.ABOUT}>NOSOTROS</Link>
           </Menu.Item>
-          <Menu.Item key="4">
-            <Link to={Routes.USERS}>PERFIL</Link>
-          </Menu.Item>
+
+          {user === null ? (
+            ""
+          ) : user === false ? (
+            <Menu.Item key="4">
+              <Link to={Routes.TERMCOND}>TERMINOS Y CONDICIONES</Link>
+            </Menu.Item>
+          ) : (
+            <Menu.Item key="4">
+              <Link to={Routes.USERS}>PERFIL</Link>
+            </Menu.Item>
+          )}
         </Menu>
       </Col>
       <Col>
@@ -73,7 +85,11 @@ const MainMenu = () => {
           <Spin />
         ) : user === false ? (
           <>
-            <Button type="primary" onClick={showModalLogin}>
+            <Button
+              style={{ marginRight: "20px" }}
+              type="primary"
+              onClick={showModalLogin}
+            >
               INICIAR SESION
             </Button>
             <Button type="primary" onClick={showModalRegister}>
@@ -94,9 +110,7 @@ const MainMenu = () => {
                   </Button>
                 </Menu.Item>
               </Menu.ItemGroup>
-              
             </SubMenu>
-
           </Menu>
         )}
       </Col>

@@ -7,17 +7,17 @@ import MainSiderMenu from "./MainSiderMenu";
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainLayout = ({ children }) => {
-    return (
-         <Layout className="layout">
+  return (
+    <Layout className="layout">
       <Header>
         <div className="logo" />
         <MainMenu />
       </Header>
       <Layout>
-        <MainSiderMenu/>
+        {/* {(window.location.pathname==="/search")?<MainSiderMenu/>:""} */}
 
         <Layout>
-          <Content style={{ padding: "0 50px" }}>
+          <Content>
             <div className="site-layout-content">{children}</div>
           </Content>
         </Layout>
@@ -26,7 +26,7 @@ const MainLayout = ({ children }) => {
         Ant Design ©2018 Created by Ant UED
       </Footer> */}
     </Layout>
-    );
+  );
 };
 
 export default MainLayout;

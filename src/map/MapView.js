@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import { useLocation } from "react-router-dom";
+import { Map, TileLayer } from "react-leaflet";
 import data from "../assets/data.json";
 import { usePosition } from "use-position";
-// import Markers from "./VenueMarkers";
+import Markers from "./VenueMarkers";
+import "leaflet/dist/leaflet.css";
+
+const styles = {
+  wrapper: {
+    height: "400px",
+    width: "90%",
+    margin: "0 auto",
+    display: "flex",
+    position: "absolute",
+  },
+  map: {
+    flex: 1,
+  },
+};
 
 const MapView = () => {
   const [state, setState] = useState({
@@ -11,6 +24,8 @@ const MapView = () => {
     zoom: 13,
     data,
   });
+  const [venues, setVenues] = useState({});
+
   const watch = true;
   const {
     latitude,
@@ -38,26 +53,20 @@ const MapView = () => {
         },
         currentLocation,
       });
-    //   history.replace({
-    //     pathname: "/map",
-    //     state: {},
-    //   });
+      console.log("Ubicaciones", state);
     }
-  }, [latitude]);
+  }, [latitude, longitude]);
 
   return (
-
-      <Map
-        style={{ maxWidth: '400px', maxHeight: '200px' }}
-        center={state.currentLocation}
-        zoom={state.zoom}
-      >
+    <div style={styles.wrapper}>
+      <Map style={styles.map} center={state.currentLocation} zoom={state.zoom}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
+        <Markers venues={state.data.venues} />
       </Map>
-    
+    </div>
   );
 };
 
