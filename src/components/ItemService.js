@@ -36,6 +36,7 @@ const ItemService = ({ services }) => {
   };
 
   return (
+<<<<<<< HEAD
     <Row style={{ margin: "0 10%" }}>
       {services.map((service) => {
         return (
@@ -67,6 +68,39 @@ const ItemService = ({ services }) => {
         />
       </Modal>
     </Row>
+=======
+      <Row style={{ margin: "0 10%" }}>
+        {services.map((service) => {
+          return (
+              <Col span={8} style={{ marginTop: "10px", marginBottom: "10px" }}>
+                <Card
+                    style={{ width: 200 }}
+                    cover={<img alt="Not Found Image" src={service.photoURL} />}
+                    actions={[
+                      <Button type="primary" onClick={showModal}>
+                        Open Modal
+                      </Button>,
+                    ]}
+                >
+                  <Card.Meta
+                      title={service.servicename}
+                      description={service.description}
+                  />
+                </Card>
+              </Col>
+          );
+        })}
+        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <PayPalButton
+              createOrder={(data, actions) => createOrder(data, actions)}
+              onApprove={(data, actions) => onApprove(data, actions)}
+          />
+        </Modal>
+      </Row>
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3
   );
 };
 

@@ -1,4 +1,5 @@
 #components-layout-demo-side .logo {
+<<<<<<< HEAD
   height: 32px;
   margin: 16px;
   background: rgba(255, 255, 255, 0.3);
@@ -19,3 +20,17 @@ line-height: 64px;
 .sider {
   min-height: 100vh;
 }
+=======
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .site-layout .site-layout-background {
+    background: #fff;
+  }
+
+  .sider{
+      min-height: 100vhz;
+  }
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3

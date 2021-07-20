@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Col, Row, Typography } from "antd";
 import React from "react";
 
@@ -109,3 +110,16 @@ const TermCondPage = () => {
 };
 
 export default TermCondPage;
+=======
+import React from 'react';
+
+const TermCondPage = () => {
+    return (
+        <div>
+            <h1>Terminos y Condiciones</h1>
+        </div>
+    );
+};
+
+export default TermCondPage;
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3
