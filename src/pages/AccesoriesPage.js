@@ -13,9 +13,9 @@ import {
   message,
 } from "antd";
 import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
-import { auth, db, storage } from "../fb";
-import { useAuth } from "../lib/auth";
-import withAuth from "../hocs/withAuth";
+import { auth, db, storage } from "../../../../../Documents/react/project-final/src/fb";
+import { useAuth } from "../../../../../Documents/react/project-final/src/lib/auth";
+import withAuth from "../../../../../Documents/react/project-final/src/hocs/withAuth";
 
 const { Option } = Select;
 
