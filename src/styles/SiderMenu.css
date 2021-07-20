@@ -9,6 +9,7 @@
 }
 .ant-layout-sider{
   height: 110vmax;
+  flex: auto !important;
 }
 
 .ant-layout-sider-trigger {
