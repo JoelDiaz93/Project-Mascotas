@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import UserInfo from "../components/UserInfo";
 import { Button, Modal } from "antd";
 import UpdateUserInfo from "../components/UpdateUserInfo";
 import withAuth from "../hocs/withAuth";
+=======
+import React, {useState} from "react";
+import UserInfo from "../components/UserInfo";
+import { Button, Modal } from "antd";
+import UpdateUserInfo from "../components/UpdateUserInfo";
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3
 
 const UsersPage = () => {
   const [update, setUpdate] = useState(false);
@@ -21,7 +28,11 @@ const UsersPage = () => {
 
   return (
     <>
+<<<<<<< HEAD
       <UserInfo />
+=======
+      <UserInfo styles={{height: '100vh', display: 'grid'}} />
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3
       {/* <Button type="primary" onClick={showModalUpdate}>Actualizar informacion</Button>
       <Modal title="Actualizar Informacion" visible={update} onOk={handleUpdateOk} onCancel={handleUpdateCancel}
         footer={[
@@ -39,4 +50,8 @@ const UsersPage = () => {
   );
 };
 
+<<<<<<< HEAD
 export default withAuth(UsersPage);
+=======
+export default UsersPage;
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3

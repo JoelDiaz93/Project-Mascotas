@@ -12,5 +12,9 @@
 }
 
 .layout-all{
+<<<<<<< HEAD
   /* min-height: 100vh; */
+=======
+  min-height: 100vh;
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3
 }

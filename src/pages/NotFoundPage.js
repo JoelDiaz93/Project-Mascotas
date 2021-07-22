@@ -18,4 +18,8 @@ const NotFoundPage = () => {
   );
 };
 
+<<<<<<< HEAD
 export default NotFoundPage;
+=======
+export default NotFoundPage;
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3

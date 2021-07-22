@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Col, Row, Input, Button } from "antd";
 import Layout from "antd/lib/layout/layout";
 import React, { useState, useEffect } from "react";
@@ -143,3 +144,16 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
+=======
+import React from 'react';
+
+const SearchPage = () => {
+    return (
+        <div>
+            <h1>Buscar....</h1>
+        </div>
+    );
+};
+
+export default SearchPage;
+>>>>>>> c295891b20c2e5ebfb1576090b5b33f1dc2218c3
